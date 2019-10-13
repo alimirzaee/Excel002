@@ -1,0 +1,31 @@
+﻿1-Upload
+	1-1- Upload Large File
+		Using Stream without bufferig
+
+	1-2-Upload File security checks
+		Antiforgery /// *** 
+		DDOS controls // maybe using authorized access
+	
+		File content check
+		File name change
+		Path and File execute preventation 
+
+
+2- Parse File
+	2-1 Database Model and relations
+	2-2 Parse Excel file 
+	2-3 Import datat in Db
+	2-4 (*** Important )check if there is a way to parse excel file at upload period // because file is too large
+		and we dont want to waste time and 
+
+
+3- create CRUD Restfull API
+	3-1 Create Autocomplete backend
+	3-1 Create Functions
+	3-2 Control Indexes and rules in create and update time
+
+
+
+
+
+
