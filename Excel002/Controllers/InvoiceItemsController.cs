@@ -20,10 +20,40 @@ namespace Excel002.Controllers
         }
 
         // GET: InvoiceItems
-        public async Task<IActionResult> Index()
+        public  IActionResult Index(int? CityId, int? ProductId, int? CustomerId, String CityName, String CustomerName, String ProductName)
         {
-            var applicationDbContext = _context.InvoiceItem.Take(20).Include(i => i.city).Include(i => i.customer);
-            return View(await applicationDbContext.ToListAsync());
+
+            var result = _context.InvoiceItem.AsQueryable();
+
+            if ( CityId!= null && CityId > 0 )            
+                result = result.Where(e => e.city.Equals(CityId));
+          
+
+            if (ProductId != null && ProductId > 0)            
+                result = result.Where(e => e.ProductId.Equals(ProductId));
+
+
+            if (CustomerId != null && CustomerId > 0)
+                result = result.Where(e => e.CustomerId.Equals(CustomerId));
+
+
+            ViewBag.CityId = CityId;
+            ViewBag.ProductId = ProductId;
+            ViewBag.CustomerId = CustomerId;
+
+
+            ViewBag.CityName = CityName;
+            ViewBag.CustomerName = CustomerName;
+            ViewBag.ProductName = ProductName;
+
+
+
+
+
+
+
+            /// var applicationDbContext = _context.InvoiceItem.OrderByDescending(e=>e.Id).Take(20).Include(i => i.city).Include(i => i.customer).Include(p=>p.product);
+            return View(result.Take(20).Include(i => i.city).Include(i => i.customer).Include(p => p.product));
         }
 
         // GET: InvoiceItems/Details/5
@@ -49,9 +79,10 @@ namespace Excel002.Controllers
         // GET: InvoiceItems/Create
         public IActionResult Create()
         {
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id");
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
-            return View();
+            AddInvoiceModel model = new AddInvoiceModel();
+           /// ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id");
+          ///  ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
+            return View(model);
         }
 
         // POST: InvoiceItems/Create
@@ -59,16 +90,31 @@ namespace Excel002.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CityId,CustomerId,ProductId,Price")] InvoiceItem invoiceItem)
+        public async Task<IActionResult> Create([Bind("CityId,CustomerId,ProductId,CityName,CustomerName,ProductName,Price")] AddInvoiceModel invoiceItem)
         {
-            if (ModelState.IsValid)
+            Boolean err = !ModelState.IsValid;
+            Boolean priceIsInRange;
+            var maxPrice = _context.InvoiceItem.Where(e => e.ProductId == invoiceItem.ProductId).Max(p => p.Price);
+            priceIsInRange = invoiceItem.Price <= (maxPrice + (maxPrice * 15 / 100));
+            
+
+            if (ModelState.IsValid && priceIsInRange)
             {
-                _context.Add(invoiceItem);
+                 
+                InvoiceItem iv = new InvoiceItem
+                {
+                    CityId = invoiceItem.CityId,
+                    CustomerId = invoiceItem.CustomerId,
+                    ProductId = invoiceItem.ProductId,
+                    Price = invoiceItem.Price
+                };
+                _context.Add(iv);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Id", invoiceItem.CityId);
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", invoiceItem.CustomerId);
+            if (!priceIsInRange)
+                ViewBag.PriceNotInRangeError = "Price is bigger than max price in DB";
+
             return View(invoiceItem);
         }
 
@@ -162,5 +208,17 @@ namespace Excel002.Controllers
         {
             return _context.InvoiceItem.Any(e => e.Id == id);
         }
+
+
+        public IActionResult AddInvoice()
+        {
+            return View();
+        }
+
+
+         
+
+
+
     }
 }

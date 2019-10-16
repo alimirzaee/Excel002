@@ -149,5 +149,23 @@ namespace Excel002.Controllers
         {
             return _context.Cities.Any(e => e.Id == id);
         }
+
+
+
+        [Produces("application/json")]
+        [HttpGet("api/city/search")]
+        public async Task<IActionResult> Search()
+        {
+            try
+            {
+                string term = HttpContext.Request.Query["term"].ToString();
+                var names = _context.Cities.Where(p => p.Name.StartsWith(term)).Take(8).Select(p => new { label = p.Name, value = p.Id }).ToList();
+                return Ok(names);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

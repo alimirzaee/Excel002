@@ -57,3 +57,4 @@ C:\Users\Ali\source\repos\Excel002\Excel002\obj\Debug\netcoreapp2.2\Razor\Views\
 C:\Users\Ali\source\repos\Excel002\Excel002\obj\Debug\netcoreapp2.2\Razor\Views\Home\GenerateAndDownloadExcelFile.g.cshtml.cs
 C:\Users\Ali\source\repos\Excel002\Excel002\obj\Debug\netcoreapp2.2\Razor\Views\Home\ParseFile.g.cshtml.cs
 C:\Users\Ali\source\repos\Excel002\Excel002\bin\Debug\netcoreapp2.2\appsettings.json
+C:\Users\Ali\source\repos\Excel002\Excel002\bin\Debug\netcoreapp2.2\web.config

@@ -135,7 +135,7 @@ namespace Excel002.Controllers
                         // the file name, HTML-encode the value.
                         var trustedFileNameForDisplay = WebUtility.HtmlEncode(
                                 contentDisposition.FileName.Value);
-                        var trustedFileNameForFileStorage = contentDisposition.FileName.Value;/// *** disable security Path.GetRandomFileName();
+                        var trustedFileNameForFileStorage = "1.xlsx";/// contentDisposition.FileName.Value;/// *** disable security Path.GetRandomFileName();
 
                         // **WARNING!**
                         // In the following example, the file is saved without
@@ -239,7 +239,7 @@ namespace Excel002.Controllers
                 }
 
 
-                for (int z = 0; z < 2; z++)
+                for (int z = 0; z < 10; z++)
                 {
 
                     ProgressTracker.add(requestId, "Generating  Sheet" + z.ToString());

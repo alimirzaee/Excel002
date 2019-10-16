@@ -1,4 +1,4 @@
-﻿@model Excel002.Models.InvoiceItem
+﻿@model Excel002.Models.AddInvoiceModel
 
 @{
     ViewData["Title"] = "Create";
@@ -14,22 +14,33 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CityId" class="control-label"></label>
-                <select asp-for="CityId" class ="form-control" asp-items="ViewBag.CityId"></select>
+                <label asp-for="CityId" class="control-label" ></label>
+                <input asp-for="CityName" class="form-control" />
+
+                <input asp-for="CityId" class="form-control" text="ViewBag.CityId" readonly="readonly"  hidden="hidden" ></input>
             </div>
             <div class="form-group">
                 <label asp-for="CustomerId" class="control-label"></label>
-                <select asp-for="CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
+                <input asp-for="CustomerName" class="form-control" /> 
+                <input asp-for="CustomerId" class="form-control"   readonly="readonly" ></input>
             </div>
             <div class="form-group">
                 <label asp-for="ProductId" class="control-label"></label>
-                <input asp-for="ProductId" class="form-control" />
-                <span asp-validation-for="ProductId" class="text-danger"></span>
+                <input asp-for="ProductId" class="form-control" readonly="readonly" hidden="hidden" />
+
+                <input asp-for="ProductName" class="form-control" />
+                <input asp-for="ProductCode" class="form-control" readonly="readonly" />
+                
+                <span asp-validation-for="ProductId" class="text-danger" hidden="hidden"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div>
+                <red>@ViewBag.PriceNotInRangeError</red>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -44,4 +55,76 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+
+        $('#CityName').autocomplete({
+            source: '/api/city/search',
+            autoFill: true,
+            autocomplete: true,
+            selectFirst: true, //here
+            minLength: 1,
+            select: function (event, ui) {
+            $('#CityName').val(ui.item.label);
+            $('#CityId').val(ui.item.value);
+            return false; // Prevent the widget from inserting the value.
+            },
+            focus: function (event, ui) {
+            event.preventDefault();
+            $("#CityName").val(ui.item.label);
+            $('#CityId').val(ui.item.value);
+            }
+        });
+
+
+
+          $('#CustomerName').autocomplete({
+            source: '/api/customer/search',
+            autoFill: true,
+            autocomplete: true,
+            selectFirst: true, //here
+            minLength: 1,
+            select: function (event, ui) {
+            $('#CustomerName').val(ui.item.label);
+            $('#CustomerId').val(ui.item.value);
+            return false; // Prevent the widget from inserting the value.
+            },
+            focus: function (event, ui) {
+            event.preventDefault();
+            $("#CustomerName").val(ui.item.label);
+            $('#CustomerId').val(ui.item.value);
+            }
+          });
+
+
+           $('#ProductName').autocomplete({
+            source: '/api/product/search',
+            autoFill: true,
+            autocomplete: true,
+            selectFirst: true, //here
+            minLength: 1,
+            select: function (event, ui) {
+            $('#ProductName').val(ui.item.label);
+                $('#ProductId').val(ui.item.value);
+                $("#ProductCode").val(ui.item.code);
+            return false; // Prevent the widget from inserting the value.
+            },
+            focus: function (event, ui) {
+            event.preventDefault();
+            $("#ProductName").val(ui.item.label);
+            $("#ProductCode").val(ui.item.code);
+
+            $('#ProductId').val(ui.item.value);
+            }
+        });
+
+
+        
+    });
+</script>
+
 }

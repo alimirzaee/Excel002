@@ -10,6 +10,41 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form asp-action="Index" method="get" class="container-fluid">
+
+    <table>
+        <tr>
+            <th>City</th>
+            <th>Product</th>
+            <th>Customer</th>
+            <th></th>
+        </tr>
+
+        <tr>
+            <td>
+                <input id="CityName" name="CityName" value="@ViewBag.CityName" />
+                <input id="CityId" name="CityId"  value="@ViewBag.CityId"  readonly="readonly" hidden="hidden" />
+            </td>
+            <td>
+                <input id="ProductName" name="ProductName"  value="@ViewBag.ProductName" />
+                <input id="ProductId" name="ProductId" readonly="readonly"  value="@ViewBag.ProductId"  hidden="hidden"  />
+            </td>
+            <td>
+                <input id="CustomerName" name="CustomerName"  value="@ViewBag.CustomerName" />
+                <input id="CustomerId" name="CustomerId" readonly="readonly"  value="@ViewBag.CustomerId" hidden="hidden"  />
+            </td>
+            <td><input type="submit" value="Search" /></td>
+        </tr>
+    </table>
+
+
+
+
+
+
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -32,30 +67,109 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.city.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.customer.Name_Family)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.product.Name)
-            </td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.city.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.customer.Name_Family)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.product.Name)
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.product.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+                <td>
+                    @Html.DisplayFor(modelItem => item.product.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+
+            $('#CityName').autocomplete({
+                source: '/api/city/search',
+                autoFill: true,
+                autocomplete: true,
+                selectFirst: true, //here
+                minLength: 1,
+                select: function (event, ui) {
+                    $('#CityName').val(ui.item.label);
+                    $('#CityId').val(ui.item.value);
+                    return false; // Prevent the widget from inserting the value.
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#CityName").val(ui.item.label);
+                    $('#CityId').val(ui.item.value);
+                }
+            });
+
+
+
+            $('#CustomerName').autocomplete({
+                source: '/api/customer/search',
+                autoFill: true,
+                autocomplete: true,
+                selectFirst: true, //here
+                minLength: 1,
+                select: function (event, ui) {
+                    $('#CustomerName').val(ui.item.label);
+                    $('#CustomerId').val(ui.item.value);
+                    return false; // Prevent the widget from inserting the value.
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#CustomerName").val(ui.item.label);
+                    $('#CustomerId').val(ui.item.value);
+                }
+            });
+
+
+            $('#ProductName').autocomplete({
+                source: '/api/product/search',
+                autoFill: true,
+                autocomplete: true,
+                selectFirst: true, //here
+                minLength: 1,
+                select: function (event, ui) {
+                    $('#ProductName').val(ui.item.label);
+                    $('#ProductId').val(ui.item.value);
+                    $("#ProductCode").val(ui.item.code);
+                    return false; // Prevent the widget from inserting the value.
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#ProductName").val(ui.item.label);
+                    $("#ProductCode").val(ui.item.code);
+
+                    $('#ProductId').val(ui.item.value);
+                }
+            });
+
+
+
+        });
+    </script>
+
+}
