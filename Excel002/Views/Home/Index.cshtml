@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Index ";
+    ViewData["Title"] = "Upload";
 }
 <h1>@ViewData["Title"]</h1>
 
@@ -10,9 +10,10 @@
 
 @model StreamedSingleFileUploadPhysicalModel
 @{
-    ViewData["Title"] = "Streamed Single File Upload with AJAX (Physical)";
+    ViewData["Title"] = "Upload";
 }
 
+ 
 
 <form id="uploadForm" action="/Home/UploadPhysical" method="post"
       enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;">
@@ -32,6 +33,7 @@
     </div>
 </form>
 
+ 
 @section Scripts {
     <script>
         "use strict";

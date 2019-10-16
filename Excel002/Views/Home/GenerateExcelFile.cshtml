@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "GenerateExcelFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>GenerateExcelFile</h1>
+
+
+
+<button class='btn btn-primary' id='btn'>Generate And Export</button>
+ 
+ <div id="iframeHolder" ></div>
+<div id="iframeProgressHolder" ></div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#btn").click(function () {
+        
+            var url = '@Url.Action("GenerateAndDownloadExcelFile", "Home",new { requestId=@ViewBag.GUID })';
+
+
+            var urlP = '@Url.Action("TaskProgress","Home",new { requestId=@ViewBag.GUID })';
+
+
+      
+
+            if (!$('#iframe').length) {
+                $('#iframeHolder').html('<iframe id="iframe" src=' + '"'+url+'"'+' width="0" height="0" hidden="hidden"></iframe>');
+            }
+
+            if (!$('#iframe2').length) {
+                $('#iframeProgressHolder').html('<iframe id="iframe2" src=' + '"'+urlP+'"'+' width="800" height="200" ></iframe>');
+            }
+           
+
+
+        });
+
+
+
+    </script>
+
+}

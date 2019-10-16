@@ -14,6 +14,7 @@ using Excel002.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Excel002.Filters;
+using System.Text;
 
 namespace Excel002
 {
@@ -42,6 +43,11 @@ namespace Excel002
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            
+
 
             services.AddMvc()
                 .AddRazorPagesOptions(options =>

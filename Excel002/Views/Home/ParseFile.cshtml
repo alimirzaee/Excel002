@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewData["Title"] = "ParseFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ParseFile</h1>
+
+
+<iframe  src="@Url.Action("TaskProgress","Home",new { requestId=@ViewBag.GUID })" width="600" height="200"></iframe>
+
